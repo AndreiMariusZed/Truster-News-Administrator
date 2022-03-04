@@ -22,6 +22,7 @@ export default {
         let data = {
           id: this.user._id,
           balance: 0,
+          trust: 2.5,
         };
         let response = await this.$axios.$post(
           "http://localhost:3000/api/authors",

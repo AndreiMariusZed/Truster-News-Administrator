@@ -1,6 +1,7 @@
 <template>
   <div>
     <!-- {{ application }} -->
+    <p>{{ application.userID._id }}</p>
     <p>{{ application.userID.firstName }} {{ application.userID.lastName }}</p>
     <p>{{ application.userID.username }}</p>
     <p>{{ application.description }}</p>
@@ -44,7 +45,31 @@ export default {
     },
   },
   methods: {
-    onAccept() {},
+    async onAccept() {
+      try {
+        let data = {
+          id: this.application.userID._id,
+          balance: 0,
+          trust: 2.5,
+        };
+        let response = await this.$axios.$post(
+          "http://localhost:3000/api/authors",
+          data
+        );
+
+        if (response.success) {
+          console.log("Author added");
+          let response2 = await this.$axios.$delete(
+            `http://localhost:3000/api/applications/${this.$route.params.id}`
+          );
+          if (response2.success) {
+            this.$router.push("/cvs");
+          }
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
     async onReject() {
       try {
         let response = await this.$axios.$delete(
